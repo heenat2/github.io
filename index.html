@@ -82,10 +82,7 @@ async function init(year) {
     {
       _year_values = d3.values(_2015);
       var total = _year_values.reduce((a, b) => +a + +b, 0);
-      console.log(total);
       var percentages = _year_values.map(function(item) { return (item/total*100).toFixed(1) });
-      console.log(_year_values);
-      console.log(percentages);
       svg.selectAll("*").remove();
       svg.append("g")
          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
@@ -128,11 +125,7 @@ async function init(year) {
   {
       _year_values = d3.values(_2016)
       var total = _year_values.reduce((a, b) => +a + +b, 0);
-      console.log(total);
       var percentages = _year_values.map(function(item) { return (item/total*100).toFixed(1) });
-      console.log(causes);
-      console.log(_year_values);
-      console.log('this is a test');
       svg.selectAll("*").remove();
 
       svg.append("g")
@@ -178,11 +171,7 @@ async function init(year) {
     {
       _year_values = d3.values(_2017)
       var total = _year_values.reduce((a, b) => +a + +b, 0);
-      console.log(total);
       var percentages = _year_values.map(function(item) { return (item/total*100).toFixed(1) });
-      console.log(causes);
-      console.log(_year_values);
-      console.log('this is a test');
       svg.selectAll("*").remove();
       svg.append("g")
          .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
