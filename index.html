@@ -36,21 +36,14 @@
 
 <script>
 var margin = {top: 20, right: 50, bottom: 280, left: 100},
-    width = 700, //- margin.left - margin.right,
-    height = 550, //- margin.top - margin.bottom
+    width = 700, 
+    height = 550, 
     border = 1,
     bordercolor='black';
 
 var svg = d3.select("svg")
-            //.attr("x",100)
-            //.attr("y",100)
             .attr("width", width)
             .attr("height", height);
-            //.attr("border",border)
-            //.append("g")
-            //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-//console.log(svg.x)
-//console.log(svg.y)
 
 var borderPath = svg.append("rect")
                			.attr("x", 0)
@@ -64,11 +57,9 @@ var borderPath = svg.append("rect")
 var div = d3.select("body").append("div")
     .attr("class", "tooltip")
     .style("opacity", 0);
-//var svg = d3.select("body").append("svg")
 
 async function init(year) {
 
-  //var data = bar_chart.load_data();
   var data = await d3.csv("https://raw.githubusercontent.com/heenat2/github.io/main/data.csv");
   const _2015 = data[0];
   const _2016 = data[1];
@@ -135,7 +126,6 @@ async function init(year) {
     }
   else if (year == 2016)
   {
-      //document.getElementById("svg").innerHTML = "";
       _year_values = d3.values(_2016)
       var total = _year_values.reduce((a, b) => +a + +b, 0);
       console.log(total);
@@ -241,9 +231,6 @@ svg.append("g")
 // text label for the y axis
 svg.append("text")
       .attr("transform", "translate(" + (margin.left/2 - 30) + "," + (height/2) + ")rotate(-90)")
-      //.attr("y", 0 - margin.left)
-      //.attr("x",0 - ((height - margin.bottom - margin.top) / 2))
-      //.attr("dy", "1em")
       .style("text-anchor", "start")
       .text("No. of Deaths");
          
@@ -261,15 +248,6 @@ svg.append("text")
       .attr("transform","translate(" + (width/2) + " ," + (height - 10) + ")")
       .style("text-anchor", "middle")
       .text("Cause of Death");
-
-//svgElement = document.getElementsByTagName("svg")[0];
-
-//svgElement.style.position = "relative";
-//svgElement.style.top = 20; // "50%";
-//svgElement.style.left = 100; //"50%";
-//svgElement.style.transform = "translate(-50%, -20%)";
-
-
 }
 
 </script>
