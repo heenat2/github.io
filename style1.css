@@ -1,0 +1,61 @@
+         
+.btn {
+            text-decoration: none;
+            border: none;
+            padding: 12px 40px;
+            font-size: 16px;
+            background-color: gray;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+            cursor: pointer;
+            outline: none;
+            transition: 0.2s all;
+        }
+        /* Adding transformation when the button is active */
+          
+.btn:active {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+            background-color: lightsalmon;
+        }
+.btn:focus {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+            background-color: lightsalmon;
+        }
+
+.btn:visited {
+            transform: scale(0.98);
+            /* Scaling button to 0.98 to its original size */
+            box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+            /* Lowering the shadow */
+            background-color: lightsalmon;
+        }    
+.bar {
+            fill: lightgoldenrodyellow;
+            stroke: black;
+     }
+          
+.bar:hover {
+            fill: lightsalmon ;
+            stroke:black
+          }
+
+svg {border:1px solid black; display: block}
+
+div.tooltip {
+    position:absolute;
+    text-align:left;
+    width: 80px;
+    height: 30px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 1px;
+    border-radius: 8px;
+  }

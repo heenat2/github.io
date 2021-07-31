@@ -1,0 +1,277 @@
+<html>
+  <head>
+    <!-- linking css file with html file -->
+    <link rel="stylesheet" href="style1.css">
+  </head> 
+<script src='https://d3js.org/d3.v5.min.js'></script>
+
+<body onload='init(2015)'>
+
+<div class="container" style="float: left; width:50%; height: 90%;"> 
+  <h2 id = "graphheader"></h2>                   
+  <svg></svg>
+
+<!-- Add buttons-->
+<button id = 2015 class = "btn" type="button" onclick="init(2015)">2015</button>
+<button id = 2016 class = "btn" type="button" onclick="init(2016)">2016</button>
+<button id = 2017 class = "btn" type="button" onclick="init(2017)">2017</button>
+</div>
+
+<div class="container" style="float:left; width:40%; height: 90%;">
+  <h2>Key Facts</h2>
+  <ul>   
+  <li><h4>The Sustainable Development Goals (SDGs) adopted by the United Nations in 2015 were developed to promote healthy lives and well-being for all children. The SDG Goal 3.2.1 is to end preventable deaths of newborns and under-5 children by 2030. There are two targets:</br></br>
+    Reduce newborn mortality to at least as low as 12 per 1 000 live births in every country; and </br></br>
+    Reduce under-five mortality to at least as low as 25 per 1,000 live births in every country.</h4>
+  </li>                
+  <li><h4>Globally, infectious diseases, including pneumonia, diarrhoea and malaria, along with pre-term birth, birth asphyxia and trauma, and congenital anomalies remain the leading causes of death for children under five.
+    </h4></li>
+  <li><h4>Access to basic lifesaving interventions such as skilled delivery at birth, postnatal care, breastfeeding and adequate nutrition, vaccinations, and treatment for common childhood diseases can save many young lives.
+    </h4></li>
+    
+</div>
+<div class="container" style="position: absolute; bottom: 0;width:100%; height: 5%;">
+<p>Data and Facts Source: https://www.who.int/news-room/fact-sheets/detail/children-reducing-mortality</p>
+</div>
+
+<script>
+var margin = {top: 20, right: 50, bottom: 280, left: 100},
+    width = 700, //- margin.left - margin.right,
+    height = 550, //- margin.top - margin.bottom
+    border = 1,
+    bordercolor='black';
+
+var svg = d3.select("svg")
+            //.attr("x",100)
+            //.attr("y",100)
+            .attr("width", width)
+            .attr("height", height);
+            //.attr("border",border)
+            //.append("g")
+            //.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//console.log(svg.x)
+//console.log(svg.y)
+
+var borderPath = svg.append("rect")
+               			.attr("x", 0)
+       	        		.attr("y", 0)
+       			        .attr("height", height)
+       			        .attr("width", width)
+       			        .style("stroke", bordercolor)
+       			        .style("fill", "none")
+       	         		.style("stroke-width", border);
+
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+//var svg = d3.select("body").append("svg")
+
+async function init(year) {
+
+  //var data = bar_chart.load_data();
+  var data = await d3.csv("https://raw.githubusercontent.com/heenat2/github.io/main/data.csv");
+  const _2015 = data[0];
+  const _2016 = data[1];
+  const _2017 = data[2];
+  causes = d3.keys(_2015)
+  var y = d3.scaleLinear().domain([0,2100000]).range([(height-margin.top-margin.bottom),0]);
+  var x = d3.scaleBand().domain(causes).range([0,(width-margin.left-margin.right)]).padding(0.1);
+
+  document.getElementById("graphheader").textContent = 'Causes of death in children under 5 in ' + year;
+  var btns = document.getElementsByClassName("btn");
+  var i;
+  for (i = 0; i < btns.length; i++) {
+    btns[i].style.backgroundColor = 'gray';
+  };
+  
+
+  document.getElementById(year).style.backgroundColor = 'lightsalmon';
+
+  if (year == 2015) 
+    {
+      _year_values = d3.values(_2015);
+      var total = _year_values.reduce((a, b) => +a + +b, 0);
+      console.log(total);
+      var percentages = _year_values.map(function(item) { return (item/total*100).toFixed(1) });
+      console.log(_year_values);
+      console.log(percentages);
+      svg.selectAll("*").remove();
+      svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+         .selectAll(".bar")
+         .data(_year_values)
+         .enter()
+         .append("rect")
+         .attr("class","bar")
+         .attr("x",function(d,i) {return x(causes[i]);})
+         .attr("y",function(d) {return y(d);})
+         .attr("width",x.bandwidth())
+         .attr("height",function(d) {return height - margin.top - margin.bottom - y(d);})
+         .on("mouseover", function(d) {div.transition()
+                                          .duration(200)
+                                          .style("opacity", 1);
+                                       div.html("Death Count: " + d).style("left", (d3.event.pageX) + "px")             
+                                          .style("top", (d3.event.pageY - 28) + "px");
+                                      }
+            )      
+         .on("mouseout", function(d) {
+                                      div.transition()
+                                          .duration(500)
+                                          .style("opacity", 0);
+                                      });   
+      svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+         .selectAll("text")
+         .data(percentages)
+         .enter()
+         .append("text")
+         .text(function(d) {return d + '%';})
+         .attr("x", function(d, i){return x(causes[i]) + x.bandwidth()/2;})
+         .attr("y", function(d, i){return y(_year_values[i]) - 5;})
+         .attr("font-family" , "sans-serif")
+         .attr("font-size" , "12px")
+         .attr("fill" , "black")
+         .attr("text-anchor", "middle");
+    }
+  else if (year == 2016)
+  {
+      //document.getElementById("svg").innerHTML = "";
+      _year_values = d3.values(_2016)
+      var total = _year_values.reduce((a, b) => +a + +b, 0);
+      console.log(total);
+      var percentages = _year_values.map(function(item) { return (item/total*100).toFixed(1) });
+      console.log(causes);
+      console.log(_year_values);
+      console.log('this is a test');
+      svg.selectAll("*").remove();
+
+      svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+         .selectAll(".bar")
+         .data(_year_values)
+         .enter()
+         .append("rect")
+         .attr("class","bar")
+         .attr("x",function(d,i) {return x(causes[i]);})
+         .attr("y",function(d) {return y(d);})
+         .attr("width",x.bandwidth())
+         .attr("height",function(d) {return height - margin.top - margin.bottom - y(d);})
+         .on("mouseover", function(d) {div.transition()
+                                          .duration(200)
+                                          .style("opacity", 1);
+                                       div.html("Death Count: " + d).style("left", (d3.event.pageX) + "px")             
+                                          .style("top", (d3.event.pageY - 28) + "px");
+                                      }
+            )      
+         .on("mouseout", function(d) {
+                                      div.transition()
+                                          .duration(500)
+                                          .style("opacity", 0);
+                                      });   
+        
+
+      svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+         .selectAll("text")
+         .data(percentages)
+         .enter()
+         .append("text")
+         .text(function(d) {return d + '%';})
+         .attr("x", function(d, i){return x(causes[i]) + x.bandwidth()/2;})
+         .attr("y", function(d, i){return y(_year_values[i]) - 5;})
+         .attr("font-family" , "sans-serif")
+         .attr("font-size" , "12px")
+         .attr("fill" , "black")
+         .attr("text-anchor", "middle");
+    }
+  else
+    {
+      _year_values = d3.values(_2017)
+      var total = _year_values.reduce((a, b) => +a + +b, 0);
+      console.log(total);
+      var percentages = _year_values.map(function(item) { return (item/total*100).toFixed(1) });
+      console.log(causes);
+      console.log(_year_values);
+      console.log('this is a test');
+      svg.selectAll("*").remove();
+      svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+         .selectAll(".bar")
+         .data(_year_values)
+         .enter()
+         .append("rect")
+         .attr("class","bar")
+         .attr("x",function(d,i) {return x(causes[i]);})
+         .attr("y",function(d) {return y(d);})
+         .attr("width",x.bandwidth())
+         .attr("height",function(d) {return height - margin.top - margin.bottom - y(d);})
+         .on("mouseover", function(d) {div.transition()
+                                          .duration(200)
+                                          .style("opacity", 1);
+                                       div.html("Death Count: " + d).style("left", (d3.event.pageX) + "px")             
+                                          .style("top", (d3.event.pageY - 28) + "px");
+                                      }
+            )      
+         .on("mouseout", function(d) {
+                                      div.transition()
+                                          .duration(500)
+                                          .style("opacity", 0);
+                                      });   
+
+      svg.append("g")
+         .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+         .selectAll("text")
+         .data(percentages)
+         .enter()
+         .append("text")
+         .text(function(d) {return d + '%';})
+         .attr("x", function(d, i){return x(causes[i]) + x.bandwidth()/2;})
+         .attr("y", function(d, i){return y(_year_values[i]) - 5;})
+         .attr("font-family" , "sans-serif")
+         .attr("font-size" , "12px")
+         .attr("fill" , "black")
+         .attr("text-anchor", "middle");
+    }
+
+//Draw the y axis
+svg.append("g")
+   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+   .call(d3.axisLeft(y));
+
+// text label for the y axis
+svg.append("text")
+      .attr("transform", "translate(" + (margin.left/2 - 30) + "," + (height/2) + ")rotate(-90)")
+      //.attr("y", 0 - margin.left)
+      //.attr("x",0 - ((height - margin.bottom - margin.top) / 2))
+      //.attr("dy", "1em")
+      .style("text-anchor", "start")
+      .text("No. of Deaths");
+         
+// Draw the x-axis
+svg.append("g")
+   .attr("transform", "translate(" + margin.left + "," + (height - margin.bottom) + ")")
+   .call(d3.axisBottom(x))
+   .selectAll("text")
+   .attr("dx", "-13em")
+   .attr("dy", "-0.1em")
+   .attr("transform", "rotate(-70)");
+
+// text label for the x axis
+svg.append("text")             
+      .attr("transform","translate(" + (width/2) + " ," + (height - 10) + ")")
+      .style("text-anchor", "middle")
+      .text("Cause of Death");
+
+//svgElement = document.getElementsByTagName("svg")[0];
+
+//svgElement.style.position = "relative";
+//svgElement.style.top = 20; // "50%";
+//svgElement.style.left = 100; //"50%";
+//svgElement.style.transform = "translate(-50%, -20%)";
+
+
+}
+
+</script>
+</body>
+</html>
