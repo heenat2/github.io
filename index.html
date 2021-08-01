@@ -35,9 +35,9 @@
 </div>
 
 <script>
-var margin = {top: 20, right: 50, bottom: 280, left: 100},
+var margin = {top: 20, right: 50, bottom: 300, left: 100},
     width = 700, 
-    height = 550, 
+    height = 570, 
     border = 1,
     bordercolor='black';
 
@@ -120,6 +120,10 @@ async function init(year) {
          .attr("font-size" , "12px")
          .attr("fill" , "black")
          .attr("text-anchor", "middle");
+      svg.append("text")             
+      .attr("transform","translate(" + (width-220) + " ," + (height - 10) + ")")
+      .style("font-weight","bold")
+      .text("Total Death Count: "+total.toFixed());
     }
   else if (year == 2016)
   {
@@ -166,6 +170,10 @@ async function init(year) {
          .attr("font-size" , "12px")
          .attr("fill" , "black")
          .attr("text-anchor", "middle");
+      svg.append("text")             
+      .attr("transform","translate(" + (width-220) + " ," + (height - 10) + ")")
+      .style("font-weight","bold")
+      .text("Total Death Count: "+total.toFixed());
     }
   else
     {
@@ -210,6 +218,11 @@ async function init(year) {
          .attr("font-size" , "12px")
          .attr("fill" , "black")
          .attr("text-anchor", "middle");
+
+      svg.append("text")             
+      .attr("transform","translate(" + (width-220) + " ," + (height - 10) + ")")
+      .style("font-weight","bold")
+      .text("Total Death Count: "+total.toFixed());
     }
 
 //Draw the y axis
@@ -234,7 +247,7 @@ svg.append("g")
 
 // text label for the x axis
 svg.append("text")             
-      .attr("transform","translate(" + (width/2) + " ," + (height - 10) + ")")
+      .attr("transform","translate(" + (width/2) + " ," + (height - 30) + ")")
       .style("text-anchor", "middle")
       .text("Cause of Death");
 }
